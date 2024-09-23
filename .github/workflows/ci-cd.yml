@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -28,19 +29,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Run tests (Optional, assuming you have tests)
-      #- name: Run tests
-      # run: pytest
+      # Step 4: Authenticate with Google Cloud
+      - name: Authenticate Service Account
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       # Step 5: Set up Google Cloud SDK
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true
+          install_components: app-engine-python
 
-      # Step 6: Authenticate and deploy to App Engine
+      # Step 6: Deploy to Google App Engine
       - name: Deploy to App Engine
         run: |
           gcloud app deploy app.yaml --quiet
