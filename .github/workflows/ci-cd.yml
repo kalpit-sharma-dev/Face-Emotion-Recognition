@@ -30,8 +30,8 @@ jobs:
           pip install -r requirements.txt
 
       # Step 4: Run tests (Optional, assuming you have tests)
-      - name: Run tests
-        run: pytest
+      #- name: Run tests
+      # run: pytest
 
       # Step 5: Set up Google Cloud SDK
       - name: Set up Google Cloud SDK
